@@ -1,11 +1,31 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import { useState } from 'react';
+import { useReducer, createContext, useEffect } from 'react';
 
-import Login from "./components/login/LoginContainer";
+import LoginContainer from './components/login/LoginContainer'
 import MainAppContainer from './components/MainApp/MainAppContainer';
 
+import axios from 'axios';
+
+export const UserContext = createContext()
+
+//reducer fuction
+function userReducer(state, action) {
+  switch (action.type) {
+    case "LOG_IN": {
+      return { ...state, loggedInUser: action.payload }
+    }
+
+    default: {
+      return { ...state }
+    }
+  }
+}
+
+
 const App = (props) => {
-  const [data, setData] = useState({
+
+  //initail state for reducer function
+  const initialState = {
     users: [
       {
         "id": 1,
@@ -33,17 +53,23 @@ const App = (props) => {
         "password": "paul123"
       }
     ],
+    loggedInUser: {},
     dishes: []
-  })
+  }
+  const [user, userDispatch] = useReducer(userReducer, initialState)
 
-  console.log(data);
+  // useEffect(() => {
+  //   const dishes = 
+  // })
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Login data={data} />} />
-        <Route path='/main' element={<MainAppContainer data={data} />} />
-      </Routes>
+      <UserContext.Provider value={{ user, userDispatch }} >
+        <Routes>
+          <Route path='/' element={<LoginContainer />} />
+          <Route path='/main' element={<MainAppContainer />} />
+        </Routes>
+      </UserContext.Provider >
     </BrowserRouter>
   );
 }

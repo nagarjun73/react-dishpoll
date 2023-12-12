@@ -1,13 +1,32 @@
 import { Box, Typography, TextField, Button, Stack } from "@mui/material"
-import { useState } from "react"
+import { useState, useContext } from "react"
+import { UserContext } from "../../App"
+import { useNavigate } from 'react-router-dom'
 
-const Login = (props) => {
+const LoginContainer = (props) => {
   const [formData, setFormData] = useState({ username: '', password: '' })
+  const { user, userDispatch } = useContext(UserContext)
+  const navigate = useNavigate()
+  console.log(user, "userr")
 
   const loginHandleFunction = (e) => {
     e.preventDefault()
 
-    console.log(formData);
+    const foundUser = user.users.find((ele) => {
+      return ele.username == formData.username
+    })
+
+    if (foundUser) {
+      if (foundUser.password === formData.password) {
+        console.log("user logged in");
+        userDispatch({ type: "LOG_IN", payload: foundUser })
+        navigate('/main')
+      } else {
+        console.log("incorrect password")
+      }
+    } else {
+      console.log("user not found");
+    }
   }
 
   return (
@@ -21,8 +40,8 @@ const Login = (props) => {
             type='text'
             value={formData.username}
             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-            // error={formik.errors.email && true}
-            // helperText={formik.errors.email}
+            // error={errors.email && true}
+            // helperText={.errors.email}
             sx={{ backgroundColor: "white" }} />
 
           <TextField
@@ -31,8 +50,8 @@ const Login = (props) => {
             type='password'
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            // error={formik.errors.email && true}
-            // helperText={formik.errors.email}
+            // error={email && true}
+            // helperText={email}
             sx={{ backgroundColor: "white" }} />
 
           <Button type="submit" variant="contained">Login</Button>
@@ -42,4 +61,4 @@ const Login = (props) => {
   )
 }
 
-export default Login
+export default LoginContainer
