@@ -1,10 +1,20 @@
 import { Grid, Card, CardActions, CardContent, CardMedia, Button, Typography } from '@mui/material'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useContext } from 'react';
+import { UserContext } from '../../../App';
+import { DishesContext } from '../../../App'
 
 const DishListItem = (props) => {
   const { dish } = props
   const [rank, setRank] = useState('')
-  console.log(rank);
+  const { dishes, disheDispatch } = useContext(DishesContext)
+  const { user, userDispatch } = useContext(UserContext)
+
+  useEffect(() => {
+    if (rank) {
+      userDispatch({ type: "UPDATE_VOTE", payload: { dishId: dish.id, rank: rank } })
+    }
+  }, [rank])
 
   return (
     <Grid item xs={3}>
@@ -29,7 +39,6 @@ const DishListItem = (props) => {
             <option value={20}>Rank 2</option>
             <option value={10}>Rank 3</option>
           </select>
-          <Button variant='contained' size="small">Vote</Button>
         </CardActions>
       </Card>
     </Grid>

@@ -2,10 +2,12 @@ import { Box, Typography, TextField, Button, Stack } from "@mui/material"
 import { useState, useContext } from "react"
 import { UserContext } from "../../App"
 import { useNavigate } from 'react-router-dom'
+import { DishesContext } from '../../App'
 
 const LoginContainer = (props) => {
   const [formData, setFormData] = useState({ username: '', password: '' })
   const { user, userDispatch } = useContext(UserContext)
+  const { dishes, disheDispatch } = useContext(DishesContext)
   const navigate = useNavigate()
   console.log(user, "userr")
 
@@ -20,6 +22,7 @@ const LoginContainer = (props) => {
       if (foundUser.password === formData.password) {
         console.log("user logged in");
         userDispatch({ type: "LOG_IN", payload: foundUser })
+        localStorage.setItem('loggedUser', JSON.stringify(foundUser))
         navigate('/main')
       } else {
         console.log("incorrect password")
