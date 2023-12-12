@@ -11,7 +11,29 @@ const DishList = (props) => {
 
   const voteSubmitHandle = () => {
     disheDispatch({ type: "UPDATE_ALL_VOTES", payload: { userId: user.loggedInUser.id, votes: user.myVotes } })
-    localStorage.setItem('dishes', JSON.stringify({ ...dishes, allVotes: [...dishes.allVotes, { userId: user.loggedInUser.id, votes: user.myVotes }] }))
+
+    const allVotes = localStorage.getItem('allVotes')
+    if (allVotes) {
+      const parsedVotes = JSON.parse(localStorage.getItem('allVotes'))
+      const findVotes = parsedVotes.find((ele) => ele.userId === user.loggedInUser.id)
+      if (findVotes) {
+        const modified = parsedVotes.map((ele) => {
+          if (ele.userId === user.loggedInUser.id) {
+            return { userId: user.loggedInUser.id, votes: user.myVotes }
+          } else {
+            return ele
+          }
+        })
+        localStorage.setItem('allVotes', modified)
+      } else {
+        parsedVotes.push({ userId: user.loggedInUser.id, votes: user.myVotes })
+        localStorage.setItem('allVotes', JSON.stringify(parsedVotes))
+      }
+    } else {
+      localStorage.setItem('allVotes', JSON.stringify([{ userId: user.loggedInUser.id, votes: user.myVotes }]))
+    }
+
+    // localStorage.setItem('dishes', JSON.stringify({ ...dishes, allVotes: [...dishes.allVotes, { userId: user.loggedInUser.id, votes: user.myVotes }] }))
   }
 
   return (

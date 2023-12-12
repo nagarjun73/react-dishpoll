@@ -8,6 +8,7 @@ const MainAppContainer = (props) => {
   return (
     <div>
       {Object.keys(user.loggedInUser).length !== 0 && < DishList />}
+
     </div>
   )
 }

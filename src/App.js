@@ -3,6 +3,8 @@ import { useReducer, createContext, useEffect } from 'react';
 
 import LoginContainer from './components/login/LoginContainer'
 import MainAppContainer from './components/MainApp/MainAppContainer';
+import Navbar from './components/Navbar.js'
+import DisheRankingContainer from './components/MainApp/DisheRanking/DisheRankingContainer.js'
 
 import axios from 'axios';
 
@@ -65,6 +67,11 @@ function dishesReducer(state, action) {
       }
     }
 
+    case "GET_ALLVOTES": {
+      return { ...state, allVotes: action.payload }
+    }
+
+
     default: {
       return { ...state }
     }
@@ -122,6 +129,12 @@ const App = (props) => {
     if (user) {
       userDispatch({ type: "LOG_IN", payload: JSON.parse(localStorage.getItem('loggedUser')) })
     }
+
+    const allVotes = localStorage.getItem('allVotes')
+    if (allVotes) {
+      disheDispatch({ type: "GET_ALLVOTES", payload: JSON.parse(localStorage.getItem('allVotes')) });
+    }
+
     ((async () => {
       const dishes = await axios.get('https://raw.githubusercontent.com/syook/react-dishpoll/main/db.json')
 
@@ -135,9 +148,11 @@ const App = (props) => {
     <BrowserRouter>
       <UserContext.Provider value={{ user, userDispatch }} >
         <DishesContext.Provider value={{ dishes, disheDispatch }}>
+          <Navbar />
           <Routes>
             <Route path='/' element={<LoginContainer />} />
             <Route path='/main' element={<MainAppContainer />} />
+            <Route path='/ranking' element={<DisheRankingContainer />} />
           </Routes>
         </DishesContext.Provider>
       </UserContext.Provider >
