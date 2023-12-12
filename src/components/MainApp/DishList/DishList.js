@@ -4,10 +4,14 @@ import { useContext } from "react"
 import DishListItem from "./DishListItem"
 import { UserContext } from '../../../App';
 
+import { useNavigate } from "react-router";
+
 const DishList = (props) => {
   const { dishes, disheDispatch } = useContext(DishesContext)
   const { user, userDispatch } = useContext(UserContext)
   console.log(dishes);
+
+  const navigate = useNavigate()
 
   const voteSubmitHandle = () => {
     disheDispatch({ type: "UPDATE_ALL_VOTES", payload: { userId: user.loggedInUser.id, votes: user.myVotes } })
@@ -24,7 +28,7 @@ const DishList = (props) => {
             return ele
           }
         })
-        localStorage.setItem('allVotes', modified)
+        localStorage.setItem('allVotes', JSON.stringify(modified))
       } else {
         parsedVotes.push({ userId: user.loggedInUser.id, votes: user.myVotes })
         localStorage.setItem('allVotes', JSON.stringify(parsedVotes))
@@ -32,8 +36,7 @@ const DishList = (props) => {
     } else {
       localStorage.setItem('allVotes', JSON.stringify([{ userId: user.loggedInUser.id, votes: user.myVotes }]))
     }
-
-    // localStorage.setItem('dishes', JSON.stringify({ ...dishes, allVotes: [...dishes.allVotes, { userId: user.loggedInUser.id, votes: user.myVotes }] }))
+    navigate('/ranking')
   }
 
   return (

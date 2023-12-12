@@ -19,8 +19,8 @@ function userReducer(state, action) {
     }
 
     case "UPDATE_VOTE": {
-
       const findIfRankFilled = state.myVotes.find((ele) => ele.rank === action.payload.rank)
+
       if (findIfRankFilled) {
         return {
           ...state, myVotes: [...state.myVotes.map((ele) => {

@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom'
 
 
 const Navbar = (props) => {
+
+  const logoutButtonHandle = () => {
+    localStorage.removeItem('loggedUser')
+  }
+
   return (
     <div>
       <AppBar component="nav">
@@ -21,7 +26,7 @@ const Navbar = (props) => {
             <Button sx={{ color: '#fff' }}>
               <Link style={{ textDecoration: "none", color: '#ffffff' }} to='/ranking'>Dish Ranking</Link>
             </Button>
-            <Button sx={{ color: '#fff' }}>
+            <Button onClick={logoutButtonHandle} sx={{ color: '#fff' }}>
               <Link style={{ textDecoration: "none", color: '#ffffff' }} to='/'>Logout</Link>
             </Button>
           </Box>
