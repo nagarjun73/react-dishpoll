@@ -14,7 +14,7 @@ const DishListItem = (props) => {
     if (rank) {
       userDispatch({ type: "UPDATE_VOTE", payload: { dishId: dish.id, rank: rank } })
     }
-    if (dishes.length !== 0) {
+    if (dishes.allVotes.find((ele) => ele.userId === user.loggedInUser.id)) {
       const findVote = dishes.allVotes.find((ele) => ele.userId == user.loggedInUser.id).votes
       const findRank = findVote.find((ele) => ele.dishId == dish.id)
       if (findRank) {
