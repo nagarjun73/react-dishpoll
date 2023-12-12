@@ -14,6 +14,13 @@ const DishListItem = (props) => {
     if (rank) {
       userDispatch({ type: "UPDATE_VOTE", payload: { dishId: dish.id, rank: rank } })
     }
+    if (dishes.allVotes.length !== 0) {
+      const findVote = dishes.allVotes.find((ele) => ele.userId == user.loggedInUser.id).votes
+      const findRank = findVote.find((ele) => ele.dishId == dish.id)
+      if (findRank) {
+        setRank(findRank.rank)
+      }
+    }
   }, [rank])
 
   return (
@@ -33,7 +40,7 @@ const DishListItem = (props) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <select onChange={(e) => setRank(e.target.value)}>
+          <select value={rank} onChange={(e) => setRank(e.target.value)}>
             <option value={0}>Select Rank</option>
             <option value={30}>Rank 1</option>
             <option value={20}>Rank 2</option>
