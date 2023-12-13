@@ -9,7 +9,6 @@ import { useNavigate } from "react-router";
 const DishList = (props) => {
   const { dishes, disheDispatch } = useContext(DishesContext)
   const { user, userDispatch } = useContext(UserContext)
-  console.log(dishes);
 
   const navigate = useNavigate()
 
