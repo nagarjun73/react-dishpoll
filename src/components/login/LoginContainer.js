@@ -4,6 +4,7 @@ import { UserContext } from "../../App"
 import { useNavigate } from 'react-router-dom'
 import _ from 'lodash'
 import toast, { Toaster } from 'react-hot-toast';
+import runValidaion from './Validation'
 
 const LoginContainer = (props) => {
   const [formData, setFormData] = useState({ username: '', password: '' })
@@ -11,27 +12,13 @@ const LoginContainer = (props) => {
   const { user, userDispatch } = useContext(UserContext)
   const navigate = useNavigate()
 
-  const errors = {}
-
-  const runValidaion = () => {
-    if (formData.username.trim().length === 0) {
-      errors.username = "username should not be Empty."
-    }
-
-    if (formData.password.trim().length === 0) {
-      errors.password = "password should not be Empty"
-    }
-  }
-
   const loginHandleFunction = (e) => {
     e.preventDefault()
 
-    //validation check
-    runValidaion()
+    //Validation
+    const formValidation = runValidaion(formData)
 
-    console.log(_.isEmpty(errors), "errr");
-
-    if (_.isEmpty(errors)) {
+    if (_.isEmpty(formValidation)) {
       //check user present
       const foundUser = user.users.find((ele) => {
         return ele.username == formData.username
@@ -52,7 +39,7 @@ const LoginContainer = (props) => {
         toast.error("user not found")
       }
     } else {
-      setFormError(errors)
+      setFormError(formValidation)
     }
   }
 
@@ -62,6 +49,7 @@ const LoginContainer = (props) => {
       <Box component="form" sx={{ display: "flex", justifyContent: "center" }} onSubmit={loginHandleFunction}>
         <Stack justifyContent='center' width="50vw" spacing={5}>
           <Typography variant="h3">Login</Typography>
+          {/* Username */}
           <TextField
             label="username"
             variant="outlined"
@@ -72,6 +60,7 @@ const LoginContainer = (props) => {
             helperText={formError.username}
             sx={{ backgroundColor: "white" }} />
 
+          {/* Password */}
           <TextField
             label="password"
             variant="outlined"
