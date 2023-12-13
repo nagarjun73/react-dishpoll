@@ -5,11 +5,14 @@ import { useNavigate } from 'react-router-dom'
 import _ from 'lodash'
 import toast, { Toaster } from 'react-hot-toast';
 import runValidaion from './Validation'
+import getInitialData from "../../getInitialData"
+import { DishesContext } from '../../App';
 
 const LoginContainer = (props) => {
   const [formData, setFormData] = useState({ username: '', password: '' })
   const [formError, setFormError] = useState({})
   const { user, userDispatch } = useContext(UserContext)
+  const { disheDispatch } = useContext(DishesContext)
   const navigate = useNavigate()
 
   const loginHandleFunction = (e) => {
@@ -26,10 +29,10 @@ const LoginContainer = (props) => {
       if (foundUser) {
         //Verifying password
         if (foundUser.password === formData.password) {
-          toast.success("user logged in");
           //setting logged in user
           userDispatch({ type: "LOG_IN", payload: foundUser })
           localStorage.setItem('loggedUser', JSON.stringify(foundUser))
+          getInitialData(userDispatch, disheDispatch)
           //redirecting to result page
           navigate('/main')
         } else {

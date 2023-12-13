@@ -1,128 +1,28 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import { useReducer, createContext, useEffect } from 'react';
+import axios from 'axios';
 
+//components
 import LoginContainer from './components/login/LoginContainer'
-import MainAppContainer from './components/MainApp/MainAppContainer';
+import DishList from './components/MainApp/DishList/DishList.js';
 import Navbar from './components/Navbar.js'
 import DisheRankingContainer from './components/MainApp/DishRanking/DishRankingContainer.js'
 
-import axios from 'axios';
+//importing reducer fuction
+import userReducer from './Reducers/userReducer.js'
+import dishesReducer from './Reducers/dishesReducer.js'
 
+//importing state
+import initialUserState from './State/initialUserState.js'
+import initialDishesState from './State/initialDishesState.js'
+
+import getInitialData from './getInitialData.js'
+
+//creating context
 export const UserContext = createContext()
 export const DishesContext = createContext()
 
-//reducer fuction
-function userReducer(state, action) {
-  switch (action.type) {
-    case "LOG_IN": {
-      return { ...state, loggedInUser: action.payload }
-    }
-
-    case "GET_MY_VOTES": {
-      return { ...state, myVotes: action.payload }
-    }
-
-    case "UPDATE_VOTE": {
-      const findIfRankFilled = state.myVotes.find((ele) => ele.rank === action.payload.rank)
-
-      if (findIfRankFilled) {
-        return {
-          ...state, myVotes: [...state.myVotes.map((ele) => {
-            if (ele.rank === action.payload.rank) {
-              return action.payload
-            } else {
-              return ele
-            }
-          })]
-        }
-      } else {
-        return { ...state, myVotes: [...state.myVotes, action.payload] }
-      }
-
-    }
-
-    default: {
-      return { ...state }
-    }
-  }
-}
-
-function dishesReducer(state, action) {
-  switch (action.type) {
-    case "UPDATE_DISH": {
-      return { ...state, dishesList: action.payload }
-    }
-
-    case "UPDATE_ALL_VOTES": {
-      //check if user votes available in all votes
-      const findUserVote = state.allVotes.find((ele) => ele.userId == action.payload.userId)
-      if (findUserVote) {
-        return {
-          ...state, allVotes: [...state.allVotes.map((ele) => {
-            if (ele.userId == action.payload.userId) {
-              return action.payload
-            } else {
-              return ele
-            }
-          })]
-        }
-      } else {
-        return { ...state, allVotes: [...state.allVotes, action.payload] }
-      }
-    }
-
-    case "GET_ALLVOTES": {
-      return { ...state, allVotes: action.payload }
-    }
-
-
-    default: {
-      return { ...state }
-    }
-  }
-}
-
-
 const App = (props) => {
-
-  //initail state for reducer function
-  const initialUserState = {
-    users: [
-      {
-        "id": 1,
-        "username": "amar",
-        "password": "amar123"
-      },
-      {
-        "id": 2,
-        "username": "akbar",
-        "password": "akbar123"
-      },
-      {
-        "id": 3,
-        "username": "antony",
-        "password": "antony123"
-      },
-      {
-        "id": 4,
-        "username": "john",
-        "password": "john123"
-      },
-      {
-        "id": 5,
-        "username": "paul",
-        "password": "paul123"
-      }
-    ],
-    loggedInUser: {},
-    myVotes: []
-  }
-
-  const initialDishesState = {
-    dishesList: [],
-    allVotes: []
-  }
-
   //User Reducer
   const [user, userDispatch] = useReducer(userReducer, initialUserState)
   const [dishes, disheDispatch] = useReducer(dishesReducer, initialDishesState)
@@ -130,29 +30,7 @@ const App = (props) => {
   console.log(user, dishes);
 
   useEffect(() => {
-    const userPresent = localStorage.getItem('loggedUser')
-    if (userPresent) {
-      const currentUser = JSON.parse(localStorage.getItem('loggedUser'))
-      userDispatch({ type: "LOG_IN", payload: currentUser })
-
-      const allVotes = localStorage.getItem('allVotes')
-      if (allVotes) {
-        const votes = JSON.parse(localStorage.getItem('allVotes'))
-        disheDispatch({ type: "GET_ALLVOTES", payload: votes });
-
-        const userVotes = votes.find((ele) => ele.userId === currentUser.id)
-        console.log(userVotes);
-        if (userVotes) {
-          userDispatch({ type: "GET_MY_VOTES", payload: userVotes.votes })
-        }
-      }
-    }
-
-
-    ((async () => {
-      const dishes = await axios.get('https://raw.githubusercontent.com/syook/react-dishpoll/main/db.json')
-      disheDispatch({ type: "UPDATE_DISH", payload: dishes.data });
-    })())
+    getInitialData(userDispatch, disheDispatch)
   }, [])
 
 
@@ -164,7 +42,7 @@ const App = (props) => {
           <Navbar />
           <Routes>
             <Route path='/' element={<LoginContainer />} />
-            <Route path='/main' element={<MainAppContainer />} />
+            <Route path='/main' element={<DishList />} />
             <Route path='/ranking' element={<DisheRankingContainer />} />
           </Routes>
         </DishesContext.Provider>

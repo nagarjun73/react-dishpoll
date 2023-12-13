@@ -3,7 +3,7 @@ import { DishesContext } from "../../../App"
 import { useContext } from "react"
 import DishListItem from "./DishListItem"
 import { UserContext } from '../../../App';
-
+import _ from 'lodash'
 import { useNavigate } from "react-router";
 
 const DishList = (props) => {
@@ -41,16 +41,23 @@ const DishList = (props) => {
 
   return (
     <Box paddingTop="10vh">
-      <Stack direction="row" justifyContent="space-around" padding="20px">
-        <Typography variant="h3">Dish List </Typography>
-        <Button variant="contained" onClick={voteSubmitHandle}>Submit</Button>
-      </Stack>
-      <Grid container spacing={2} paddingX="20px">
-        {dishes.dishesList.map((ele) => {
-          return <DishListItem key={ele.id} dish={ele} />
-        })}
-      </Grid>
-    </Box>
+      {_.isEmpty(user.loggedInUser)
+        ?
+        <Typography> Please Login</Typography>
+        :
+        <Box>
+          <Stack direction="row" justifyContent="space-around" padding="20px">
+            <Typography variant="h3">Dish List </Typography>
+            <Button variant="contained" onClick={voteSubmitHandle}>Submit</Button>
+          </Stack>
+          <Grid container spacing={2} paddingX="20px">
+            {dishes.dishesList.map((ele) => {
+              return <DishListItem key={ele.id} dish={ele} />
+            })}
+          </Grid>
+        </Box>
+      }
+    </Box >
   )
 }
 

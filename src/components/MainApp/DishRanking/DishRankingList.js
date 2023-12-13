@@ -1,6 +1,6 @@
 import List from '@mui/material/List';
-import { DishesContext } from '../../../App';
 import { useContext } from 'react';
+import { DishesContext } from '../../../App';
 import DishRankingItem from './DishRankingListItem'
 
 const DishRankingList = (props) => {
