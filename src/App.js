@@ -4,7 +4,7 @@ import { useReducer, createContext, useEffect } from 'react';
 import LoginContainer from './components/login/LoginContainer'
 import MainAppContainer from './components/MainApp/MainAppContainer';
 import Navbar from './components/Navbar.js'
-import DisheRankingContainer from './components/MainApp/DisheRanking/DisheRankingContainer.js'
+import DisheRankingContainer from './components/MainApp/DishRanking/DishRankingContainer.js'
 
 import axios from 'axios';
 

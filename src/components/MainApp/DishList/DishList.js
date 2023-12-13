@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, Button } from "@mui/material"
+import { Box, Grid, Typography, Button, Stack } from "@mui/material"
 import { DishesContext } from "../../../App"
 import { useContext } from "react"
 import DishListItem from "./DishListItem"
@@ -40,10 +40,12 @@ const DishList = (props) => {
   }
 
   return (
-    <Box>
-      <Typography variant="h2">Dish List </Typography>
-      <Button variant="contained" onClick={voteSubmitHandle}>Submit</Button>
-      <Grid container spacing={2}>
+    <Box paddingTop="10vh">
+      <Stack direction="row" justifyContent="space-around" padding="20px">
+        <Typography variant="h3">Dish List </Typography>
+        <Button variant="contained" onClick={voteSubmitHandle}>Submit</Button>
+      </Stack>
+      <Grid container spacing={2} paddingX="20px">
         {dishes.dishesList.map((ele) => {
           return <DishListItem key={ele.id} dish={ele} />
         })}
