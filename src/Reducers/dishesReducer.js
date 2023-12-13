@@ -26,7 +26,6 @@ const dishesReducer = (state, action) => {
       return { ...state, allVotes: action.payload }
     }
 
-
     default: {
       return { ...state }
     }

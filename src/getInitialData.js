@@ -12,7 +12,6 @@ const getInitialData = (userDispatch, disheDispatch) => {
       disheDispatch({ type: "GET_ALLVOTES", payload: votes });
 
       const userVotes = votes.find((ele) => ele.userId === currentUser.id)
-      console.log(userVotes);
       if (userVotes) {
         userDispatch({ type: "GET_MY_VOTES", payload: userVotes.votes })
       }

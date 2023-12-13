@@ -27,8 +27,6 @@ const App = (props) => {
   const [user, userDispatch] = useReducer(userReducer, initialUserState)
   const [dishes, disheDispatch] = useReducer(dishesReducer, initialDishesState)
 
-  console.log(user, dishes);
-
   useEffect(() => {
     getInitialData(userDispatch, disheDispatch)
   }, [])

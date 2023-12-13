@@ -1,11 +1,15 @@
 import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material"
 import { Link } from 'react-router-dom'
 import { useNavigate } from "react-router-dom"
+import { UserContext } from "../App"
+import { useContext } from 'react';
 
 const Navbar = (props) => {
   const navigate = useNavigate()
+  const { userDispatch } = useContext(UserContext)
 
   const logoutButtonHandle = () => {
+    userDispatch({ type: "LOGOUT_USER" })
     localStorage.removeItem('loggedUser')
     navigate('/')
   }
