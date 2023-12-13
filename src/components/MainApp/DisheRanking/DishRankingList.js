@@ -23,7 +23,6 @@ const DishRankingList = (props) => {
   const helperFunction = (vt) => {
     const final = allVotes.flat().reduce((ini, ele2) => {
       if (ele2.dishId == vt.id) {
-        console.log(ini, vt);
         return ini + Number(ele2.rank)
       } else {
         return ini
@@ -36,9 +35,6 @@ const DishRankingList = (props) => {
   const allDishes = dishes.dishesList.map((ele) => {
     return helperFunction(ele)
   })
-
-  console.log(allDishes);
-
 
   return (
     <List sx={{ width: '90vw', maxWidth: 360, bgcolor: 'background.paper' }}>

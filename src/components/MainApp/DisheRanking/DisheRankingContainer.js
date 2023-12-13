@@ -1,11 +1,12 @@
 import DishRankingList from "./DishRankingList"
+import { Box, Typography } from "@mui/material"
 
 const DisheRankingContainer = (props) => {
   return (
-    <div>
-      <h1>Dish Ranking</h1>
+    <Box marginTop="10vh">
+      <Typography variant="h3">Dish Ranking</Typography>
       <DishRankingList />
-    </div>
+    </Box>
   )
 }
 

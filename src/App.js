@@ -18,6 +18,10 @@ function userReducer(state, action) {
       return { ...state, loggedInUser: action.payload }
     }
 
+    case "GET_MY_VOTES": {
+      return { ...state, myVotes: action.payload }
+    }
+
     case "UPDATE_VOTE": {
       const findIfRankFilled = state.myVotes.find((ele) => ele.rank === action.payload.rank)
 
@@ -119,25 +123,34 @@ const App = (props) => {
     allVotes: []
   }
 
+  //User Reducer
   const [user, userDispatch] = useReducer(userReducer, initialUserState)
   const [dishes, disheDispatch] = useReducer(dishesReducer, initialDishesState)
 
   console.log(user, dishes);
 
   useEffect(() => {
-    const user = localStorage.getItem('loggedUser')
-    if (user) {
-      userDispatch({ type: "LOG_IN", payload: JSON.parse(localStorage.getItem('loggedUser')) })
+    const userPresent = localStorage.getItem('loggedUser')
+    if (userPresent) {
+      const currentUser = JSON.parse(localStorage.getItem('loggedUser'))
+      userDispatch({ type: "LOG_IN", payload: currentUser })
+
+      const allVotes = localStorage.getItem('allVotes')
+      if (allVotes) {
+        const votes = JSON.parse(localStorage.getItem('allVotes'))
+        disheDispatch({ type: "GET_ALLVOTES", payload: votes });
+
+        const userVotes = votes.find((ele) => ele.userId === currentUser.id)
+        console.log(userVotes);
+        if (userVotes) {
+          userDispatch({ type: "GET_MY_VOTES", payload: userVotes.votes })
+        }
+      }
     }
 
-    const allVotes = localStorage.getItem('allVotes')
-    if (allVotes) {
-      disheDispatch({ type: "GET_ALLVOTES", payload: JSON.parse(localStorage.getItem('allVotes')) });
-    }
 
     ((async () => {
       const dishes = await axios.get('https://raw.githubusercontent.com/syook/react-dishpoll/main/db.json')
-
       disheDispatch({ type: "UPDATE_DISH", payload: dishes.data });
     })())
   }, [])

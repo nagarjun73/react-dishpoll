@@ -17,14 +17,14 @@ const Navbar = (props) => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            DISHE APP
+            DISH APP
           </Typography>
           {localStorage.getItem('loggedUser') && <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             <Button sx={{ color: '#fff' }}>
-              <Link style={{ textDecoration: "none", color: '#ffffff' }} to='/main'>Dishe List</Link>
+              <Link style={{ textDecoration: "none", color: '#ffffff' }} to='/main'>Dish List</Link>
             </Button>
             <Button sx={{ color: '#fff' }}>
-              <Link style={{ textDecoration: "none", color: '#ffffff' }} to='/ranking'>Dishe Ranking</Link>
+              <Link style={{ textDecoration: "none", color: '#ffffff' }} to='/ranking'>Dish Ranking</Link>
             </Button>
             <Button onClick={logoutButtonHandle} sx={{ color: '#fff' }}>
               <Link style={{ textDecoration: "none", color: '#ffffff' }} to='/'>Logout</Link>

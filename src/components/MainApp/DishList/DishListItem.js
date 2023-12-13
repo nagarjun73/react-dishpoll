@@ -7,16 +7,18 @@ import { DishesContext } from '../../../App'
 const DishListItem = (props) => {
   const { dish } = props
   const [rank, setRank] = useState('')
-  const { dishes, disheDispatch } = useContext(DishesContext)
+  const { dishes } = useContext(DishesContext)
   const { user, userDispatch } = useContext(UserContext)
 
   useEffect(() => {
     if (rank) {
       userDispatch({ type: "UPDATE_VOTE", payload: { dishId: dish.id, rank: rank } })
     }
-    if (dishes.allVotes.find((ele) => ele.userId === user.loggedInUser.id)) {
-      const findVote = dishes.allVotes.find((ele) => ele.userId == user.loggedInUser.id).votes
-      const findRank = findVote.find((ele) => ele.dishId == dish.id)
+    //check if user votes found in localStorage
+    const votesFound = dishes.allVotes.find((ele) => ele.userId === user.loggedInUser.id)
+    if (votesFound) {
+      //if found get all user votes and find ranks and set it to state
+      const findRank = votesFound.votes.find((ele) => ele.dishId == dish.id)
       if (findRank) {
         setRank(findRank.rank)
       }
